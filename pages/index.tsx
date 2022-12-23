@@ -1,15 +1,12 @@
 import React from 'react'
 import { NextPage } from 'next'
-import { Typography } from '@mui/material'
+import { Layout } from '../components/layouts'
 
 const HomePage: NextPage = () => {
-  return <>
-    <Typography 
-      variant='h1' 
-      color={'primary'}
-    >Hola Mundo
-    </Typography>
-  </>
+  
+  return <Layout>
+    Conrent here...
+  </Layout>
 }
 
 export default HomePage

@@ -18,6 +18,11 @@ export const ligthTheme = createTheme({
     },
   },
   components: {
-    
+    MuiAppBar: {
+      defaultProps: {
+        elevation: 0
+      },
+      styleOverrides: {}
+    }
   }
 })
