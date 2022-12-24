@@ -12,3 +12,6 @@ mongodb://localhost:27017/entries-db
 
 ## Configurar las variables de entorno
 Renombrar el archivo __.env.example__ a __.env__
+
+## LLenar la Base de datos 
+```http://localhost:3000/api/seed/```
