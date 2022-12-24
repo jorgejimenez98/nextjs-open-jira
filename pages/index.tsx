@@ -2,7 +2,7 @@ import React from 'react'
 import { NextPage } from 'next'
 import { Layout } from '../components/layouts'
 import { Card, CardHeader, Grid } from '@mui/material'
-import { EntryList } from '../components/ui'
+import { EntryList, NewEntry } from '../components/ui'
 
 const HomePage: NextPage = () => {
   
@@ -12,6 +12,7 @@ const HomePage: NextPage = () => {
         <Card sx={{ height: 'calc(100vh - 100px)'}}>
           <CardHeader title={'Pendientes'} />
           {/* Agregar una nueva entrada */}
+          <NewEntry />
           {/* Listado de las Entradas */}
           <EntryList status='PENDING'/>
         </Card>
