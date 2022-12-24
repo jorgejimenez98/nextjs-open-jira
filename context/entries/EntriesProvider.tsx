@@ -8,7 +8,7 @@ export interface EntriesState {
     entries: Entry[]
 }
 
-const Entries_INITIAL_STATE: EntriesState = {
+const ENTRIES_INITIAL_STATE: EntriesState = {
     entries: [
         {
             _id: UUID4(),
@@ -28,15 +28,26 @@ const Entries_INITIAL_STATE: EntriesState = {
             status: 'FINISHED',
             createdAt: Date.now()
         }
-    ]
+    ],
 }
 
 export const EntriesProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(entriesReducer, Entries_INITIAL_STATE)
+  const [state, dispatch] = useReducer(entriesReducer, ENTRIES_INITIAL_STATE)
+
+  const addNewentry = (description: string) => {
+    const newEntry: Entry = {
+        _id: UUID4(),
+        description,
+        createdAt: Date.now(),
+        status: 'PENDING'
+    }
+    dispatch({ type: '[Entry] Add-Entry', payload: newEntry})
+  }
 
   return (
     <EntriesContext.Provider value={{
         ...state,
+        addNewentry
     }}>
         {children}
     </EntriesContext.Provider>

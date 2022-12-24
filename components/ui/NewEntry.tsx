@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Box, TextField } from '@mui/material'
 import { AddCircleOutlined, SaveOutlined } from '@mui/icons-material'
+import { EntriesContext } from '../../context/entries'
 
 const NewEntry: React.FC = () => {
+  const { addNewentry } = useContext(EntriesContext)
   const [isAdding, setIsAdding] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isTouched, setIsTouched] = useState(false)
 
   const handleSave = () => {
     if (inputValue.length === 0) return 
-    console.log(inputValue)
+    addNewentry(inputValue)
+    setIsAdding(false)
+    setIsTouched(false)
+    setInputValue('')
   }
 
   return <>
