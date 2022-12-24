@@ -25,13 +25,13 @@ export const connect = async () => {
         await mongoose.disconnect()
     }
 
-    await mongoose.connect('....')
+    await mongoose.connect(process.env.MONGO_DB_CONNECTION || '')
     mongoConnection.isConnected = 1
-    console.log('Conectado a Mongo DV', '....')
+    console.log('Conectado a Mongo DV', process.env.MONGO_DB_CONNECTION)
 }
 
 export const disconnect = async () => {
-    if (mongoConnection.isConnected !== 0) return 
+    if (mongoConnection.isConnected === 0) return 
     await mongoose.disconnect()
     console.log('Desonectado de Mongo DB')
 }

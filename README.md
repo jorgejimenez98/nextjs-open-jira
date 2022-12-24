@@ -5,7 +5,10 @@ Para correr localmente, se necesita la BD
  docker-compose up -d
 ```
 
-MONGODB URL local"
+# MONGODB URL local"
 ```
- mongodb://localhost:27017/entries-db
+mongodb://localhost:27017/entries-db
 ```
+
+## Configurar las variables de entorno
+Renombrar el archivo __.env.example__ a __.env__
