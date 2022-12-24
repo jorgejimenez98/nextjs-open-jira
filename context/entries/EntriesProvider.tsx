@@ -37,7 +37,6 @@ export const EntriesProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <EntriesContext.Provider value={{
         ...state,
-        entries: []
     }}>
         {children}
     </EntriesContext.Provider>
