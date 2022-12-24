@@ -1,11 +1,26 @@
-import { Card, CardActionArea, CardActions, CardContent, Typography } from '@mui/material'
-import React from 'react'
 import { Entry } from '../../interfaces'
+import { UiContext } from '../../context/ui'
+import React, { DragEvent, useContext } from 'react'
+import { Card, CardActionArea, CardActions, CardContent, Typography } from '@mui/material'
 
 const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
+    const { startDragging, endDragging } = useContext(UiContext)
+
+    const handleDrag = (event: DragEvent) => {
+        event.dataTransfer?.setData('text', entry._id)
+        startDragging()
+    }
+
+    const onDragEnd = () => {
+        endDragging()
+    }
+
   return (
     <Card
         sx={{marginBottom: 1 }}
+        draggable
+        onDragStart={handleDrag}
+        onDragEnd={onDragEnd}
         // Eventos de Drag
     >
         <CardActionArea>

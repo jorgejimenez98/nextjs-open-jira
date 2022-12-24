@@ -1,27 +1,42 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Paper, List } from '@mui/material'
-import React, { useContext, useMemo } from 'react'
 import { EntriesContext } from '../../context/entries'
-import { StatusType } from '../../interfaces'
 import { EntryCard } from './'
+import { Paper, List } from '@mui/material'
+import { StatusType } from '../../interfaces'
+import { UiContext } from '../../context/ui'
+import React, { useContext, useMemo , DragEvent} from 'react'
+import styles from './EntryList.module.css'
 
 interface EntryListProps {
     status: StatusType
 }
 
 const EntryList: React.FC<EntryListProps> = ({ status }) => {
-const { entries } = useContext(EntriesContext)
-const entriesList = useMemo(() => entries.filter(entry => entry.status === status), [entries])
+    const { entries } = useContext(EntriesContext)
+    const { isDragging } = useContext(UiContext)
+    const entriesList = useMemo(() => entries.filter(entry => entry.status === status), [entries])
+
+    const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+        const id = event.dataTransfer.getData('text')
+    }
+
+    const allowDrop = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault()
+    }
 
   return (
-    <div>
+    <div 
+        onDrop={handleDrop}
+        onDragOver={allowDrop}
+        className={isDragging ? styles.dragging : ''}
+    >
         <Paper sx={{ 
             backgroundColor: 'transparent',
             height: 'calc(100vh - 180px)', 
             overflowY: "scroll", 
             padding: 1,
         }}>
-            <List sx={{ opacity: 1 }}>
+            <List sx={{ opacity: isDragging ? 0.3 : 1, transition: 'all 0.3s'  }}>
                 {entriesList.map(entry => <EntryCard 
                     key={entry._id} entry={entry}
                 />)}
