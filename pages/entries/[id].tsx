@@ -1,17 +1,19 @@
 import { NextPage, GetServerSideProps } from 'next'
 import { Entry, StatusType } from '../../interfaces'
 import { Layout } from '../../components/layouts'
-import React, { ChangeEvent, useMemo, useState } from 'react'
-import { DeleteOutline, SaveAltOutlined } from '@mui/icons-material'
+import React, { ChangeEvent, useContext, useMemo, useState } from 'react'
+import { DeleteOutline, Router, SaveAltOutlined } from '@mui/icons-material'
 import { capitalize, CardHeader, Grid, Card, CardContent, TextField, CardActions, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, IconButton } from '@mui/material'
 import { isValidObjectId } from 'mongoose'
-import { EntryModel } from '../../models'
 import { getEntryById } from '../../database'
+import { EntriesContext } from '../../context/entries'
+import { useRouter } from 'next/router'
 
 const validStatus: StatusType[] = ['PENDING', 'IN_PROGRESS', 'FINISHED']
 
 const EntryPage: NextPage<{ entry: Entry }> = ({ entry }) => {
-
+    const { updateEntry } = useContext(EntriesContext)
+    const router = useRouter()
     const [inputValue, setInputValue] = useState(entry.description)
     const [status, setStatus] = useState<StatusType>(entry.status)
     const [touched, setTouched] = useState(false)
@@ -23,7 +25,8 @@ const EntryPage: NextPage<{ entry: Entry }> = ({ entry }) => {
     }
 
     const handleSave = () => {
-        console.log({ inputValue, status })
+        if (isInValid) return
+        updateEntry({...entry, description: inputValue, status})
     }
 
   return <Layout>
