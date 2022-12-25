@@ -1,14 +1,28 @@
-import React from 'react'
 import { NextPage } from 'next'
-import { Layout } from '../../components/layouts'
-import { capitalize, CardHeader, Grid, Card, CardContent, TextField, CardActions, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, IconButton } from '@mui/material'
-import { DeleteOutline, SaveAltOutlined } from '@mui/icons-material'
 import { StatusType } from '../../interfaces'
+import { Layout } from '../../components/layouts'
+import React, { ChangeEvent, useMemo, useState } from 'react'
+import { DeleteOutline, SaveAltOutlined } from '@mui/icons-material'
+import { capitalize, CardHeader, Grid, Card, CardContent, TextField, CardActions, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, IconButton } from '@mui/material'
 
 
 const validStatus: StatusType[] = ['PENDING', 'IN_PROGRESS', 'FINISHED']
 
 const EntryPage: NextPage = () => {
+    const [inputValue, setInputValue] = useState('')
+    const [status, setStatus] = useState<StatusType>('PENDING')
+    const [touched, setTouched] = useState(false)
+    const isInValid = useMemo(() => inputValue.length <= 0 && touched, [inputValue, touched])
+
+    const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const newStatus = e.target.value as StatusType
+        setStatus(newStatus)
+    }
+
+    const handleSave = () => {
+        console.log({ inputValue, status })
+    }
+
   return <Layout>
     <Grid
         container
@@ -25,16 +39,25 @@ const EntryPage: NextPage = () => {
                     <TextField 
                         autoFocus
                         fullWidth
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
                         label="Nueva entrada"
                         multiline
                         placeholder='Nueva entrada...'
                         sx={{ marginTop: 2, marginBottom: 2 }}
+                        onBlur={() => setTouched(true)}
+                        helperText={isInValid && 'Ingrese un valor'}
+                        error={isInValid}
                     />
 
                     {/* RADIO */}
                     <FormControl>
                         <FormLabel>Status</FormLabel>
-                        <RadioGroup row>
+                        <RadioGroup 
+                            row
+                            value={status}
+                            onChange={onStatusChange}
+                        >
                             {validStatus.map((status, idx) => (
                                 <FormControlLabel 
                                     key={idx}
@@ -52,6 +75,8 @@ const EntryPage: NextPage = () => {
                         startIcon={<SaveAltOutlined />}
                         variant='contained'
                         fullWidth
+                        onClick={handleSave}
+                        disabled={isInValid}
                     >
                         Save
                     </Button>
