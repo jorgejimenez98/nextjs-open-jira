@@ -17,7 +17,7 @@ export default function handler(
 
     switch (req.method){
         case 'GET':
-            return res.status(200).json({ message: 'TODO GET' }) 
+            return getEntry(req, res, String(id)) 
         
         case 'PUT':
             return updateEntry(req, res, String(id))
@@ -54,4 +54,18 @@ const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>, id: 
         console.warn(error)
         return res.status(400).json({ message: 'Algo ha salido mal' })  
     }
+}
+
+
+const getEntry = async (req: NextApiRequest, res: NextApiResponse<Data>, id: string) => {
+    await db.connect()
+    // Validate Model
+    const entryUpdate = await EntryModel.findById(id)
+    if (!entryUpdate) {
+        await db.disconnect()
+        return res.status(404).json({ message: 'Entry not found' })
+    }
+    await db.disconnect()
+    // Response
+    res.status(200).json(entryUpdate!)
 }
