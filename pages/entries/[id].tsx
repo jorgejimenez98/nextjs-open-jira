@@ -1,16 +1,19 @@
-import { NextPage } from 'next'
-import { StatusType } from '../../interfaces'
+import { NextPage, GetServerSideProps } from 'next'
+import { Entry, StatusType } from '../../interfaces'
 import { Layout } from '../../components/layouts'
 import React, { ChangeEvent, useMemo, useState } from 'react'
 import { DeleteOutline, SaveAltOutlined } from '@mui/icons-material'
 import { capitalize, CardHeader, Grid, Card, CardContent, TextField, CardActions, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, IconButton } from '@mui/material'
-
+import { isValidObjectId } from 'mongoose'
+import { EntryModel } from '../../models'
+import { getEntryById } from '../../database'
 
 const validStatus: StatusType[] = ['PENDING', 'IN_PROGRESS', 'FINISHED']
 
-const EntryPage: NextPage = () => {
-    const [inputValue, setInputValue] = useState('')
-    const [status, setStatus] = useState<StatusType>('PENDING')
+const EntryPage: NextPage<{ entry: Entry }> = ({ entry }) => {
+
+    const [inputValue, setInputValue] = useState(entry.description)
+    const [status, setStatus] = useState<StatusType>(entry.status)
     const [touched, setTouched] = useState(false)
     const isInValid = useMemo(() => inputValue.length <= 0 && touched, [inputValue, touched])
 
@@ -95,6 +98,27 @@ const EntryPage: NextPage = () => {
         <DeleteOutline />
     </IconButton>
   </Layout>
+}
+
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const { id } = params as { id: string }
+    const entry = await getEntryById(id)
+
+    if (!isValidObjectId(id)) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+            entry
+        }
+    }
 }
 
 export default EntryPage

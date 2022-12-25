@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { Entry } from '../../interfaces'
 import { UiContext } from '../../context/ui'
 import React, { DragEvent, useContext } from 'react'
@@ -5,7 +6,7 @@ import { Card, CardActionArea, CardActions, CardContent, Typography } from '@mui
 
 const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
     const { startDragging, endDragging } = useContext(UiContext)
-
+    const router = useRouter()
     const handleDrag = (event: DragEvent) => {
         event.dataTransfer?.setData('text', entry._id)
         startDragging()
@@ -21,6 +22,7 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
         draggable
         onDragStart={handleDrag}
         onDragEnd={onDragEnd}
+        onClick={() => router.push(`/entries/${entry._id}`)}
         // Eventos de Drag
     >
         <CardActionArea>
